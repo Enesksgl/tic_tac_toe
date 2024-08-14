@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tic_tac_toe/controller/game_controller.dart';
+import 'package:tic_tac_toe/main.dart';
 import 'package:tic_tac_toe/services/supabase_service.dart';
+import 'package:tic_tac_toe/widgets/room_tile.dart';
 
 class RoomsScreen extends StatefulWidget {
   const RoomsScreen({super.key});
@@ -22,13 +25,29 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Rooms"),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Oyun Odaları"),
+              Row(
+                children: [
+                  const Icon(Icons.person),
+                  Text(GameController.username!),
+                ],
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => globalNavigator.currentState!.pushNamed("/rooms/create"),
+          icon: const Icon(Icons.add),
+          label: const Text("Oda oluştur"),
         ),
         body: Obx(
           () => Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: supabaseService.rooms.map((room) => Text("${room.id!}${room.name!}")).toList()),
+            child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center, children: supabaseService.rooms.map((room) => RoomTile(room: room)).toList())),
           ),
         ));
   }

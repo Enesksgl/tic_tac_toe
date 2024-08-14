@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tic_tac_toe/controller/game_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
         final String? username = prefs.getString('username');
         if (username != null && username != "") {
           navigator.pushReplacementNamed("/rooms");
+          GameController.username = username;
         } else {
           navigator.pushReplacementNamed("/login");
         }

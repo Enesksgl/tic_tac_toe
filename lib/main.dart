@@ -5,6 +5,7 @@ import 'package:tic_tac_toe/screens/login_screen.dart';
 import 'package:tic_tac_toe/screens/room_create_screen.dart';
 import 'package:tic_tac_toe/screens/rooms_screen.dart';
 import 'package:tic_tac_toe/screens/splash_screen.dart';
+import 'package:tic_tac_toe/screens/waiting_screen.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/login': (c) => const LoginScreen(),
         '/rooms': (c) => const RoomsScreen(),
         '/rooms/create': (c) => const RoomCreateScreen(),
+        '/waiting': (c)=> const WaitingScreen()
       },
     );
   }
