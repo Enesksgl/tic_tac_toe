@@ -10,13 +10,18 @@ class SupabaseService {
   factory SupabaseService() {
     return _service;
   }
+
   SupabaseService._internal();
 
   void createRoom(Room room) async {
     await supabase.from('rooms').insert(room);
+    rooms.clear();
   }
 
   void listenRoom() async {
-    supabase.from('rooms').stream(primaryKey: ["id"]).listen((data) => rooms.addAll(data.map((d) => Room.fromJson(d)).toList()));
+    supabase
+        .from('rooms')
+        .stream(primaryKey: ["id"])
+        .listen((data) => rooms.addAll(data.map((d) => Room.fromJson(d)).toList()));
   }
 }

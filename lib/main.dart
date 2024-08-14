@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:tic_tac_toe/models/room.dart';
-import 'package:tic_tac_toe/services/supabase_service.dart';
+import 'package:tic_tac_toe/screens/login_screen.dart';
+import 'package:tic_tac_toe/screens/room_create_screen.dart';
+import 'package:tic_tac_toe/screens/rooms_screen.dart';
+import 'package:tic_tac_toe/screens/splash_screen.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -12,24 +14,33 @@ Future<void> main() async {
   );
   runApp(const MyApp());
 }
+final GlobalKey<NavigatorState> globalNavigator = GlobalKey<NavigatorState>(debugLabel: 'main');
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      navigatorKey: globalNavigator,
+      title: 'Tic Tac Toe',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "/",
+      onUnknownRoute: (settings) => throw Exception('[Main Navigator] Unknown route: ${settings.name}'),
+      routes: {
+        '/': (c) => const SplashScreen(),
+        '/login': (c) => const LoginScreen(),
+        '/rooms': (c) => const RoomsScreen(),
+        '/rooms/create': (c) => const RoomCreateScreen(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+/*class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
@@ -38,12 +49,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final supabaseService =Get.put(SupabaseService());
-  @override
-  void initState() {
-    super.initState();
-    supabaseService.listenRoom();
-  }
+
 
   Future<void> _incrementCounter() async {
     supabaseService.createRoom(Room("enes", "enes", "ahmet", "enes"));
@@ -56,10 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Obx(
-          ()=> Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: supabaseService.rooms.map((room) => Text("${room.id!}${room.name!}")).toList()),
-        ),
+      body:
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
@@ -69,3 +72,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+*/
