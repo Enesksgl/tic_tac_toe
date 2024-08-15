@@ -18,6 +18,8 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
   final TextEditingController _passwordController = TextEditingController();
   int boardLength = 3;
   final supabaseService = Get.put(SupabaseService());
+  final gameController = Get.put(GameController());
+
 
   bool isLocked = false;
 
@@ -178,6 +180,7 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
                     boardLength: boardLength,
                     password: _passwordController.text));
                 supabaseService.listenCreatedRoom(room);
+                gameController.currentPlayer = Player.PLAYER_1;
                 navigator?.pushReplacementNamed("/waiting");
               },
               child: const Text("Oluştur"))
