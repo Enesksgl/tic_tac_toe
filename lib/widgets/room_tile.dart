@@ -83,7 +83,7 @@ class _RoomTileState extends State<RoomTile> {
               gameController.setRoomAndPlayerY(widget.room);
               await supabaseService.updateRoom(gameController.room.value);
               supabaseService.listenCreatedRoom(widget.room);
-              navigator?.pushReplacementNamed("/game");
+              navigator?.pushNamed("/game");
             }
           }
         },

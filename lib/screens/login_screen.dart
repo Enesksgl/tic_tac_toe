@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controller/game_controller.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -76,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (_formKey.currentState!.validate()) {
                           final SharedPreferences prefs = await SharedPreferences.getInstance();
                           await prefs.setString('username', _nameController.text);
+                          GameController.username = _nameController.text;
                          navigator!.pushReplacementNamed("/rooms");
                         }
                       },

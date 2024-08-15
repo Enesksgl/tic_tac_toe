@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tic_tac_toe/main.dart';
 import 'package:tic_tac_toe/models/room.dart';
 
 class GameController extends GetxController {
@@ -25,7 +26,7 @@ class GameController extends GetxController {
             actions: [
               TextButton(
                 child: const Text("TAMAM"),
-                onPressed: () => navigator?.pushReplacementNamed("/rooms"),
+                onPressed: () => navigator!.pop(true),
               ),
             ],
           );
@@ -39,8 +40,9 @@ class GameController extends GetxController {
     for (var pattern in winPatterns) {
       final String sign = board[pattern[0]];
       if (sign != '' && pattern.every((index) => board[index] == sign)) {
-        await showGameFinishDialog(navigator!.context, sign == convertPlayerToSign(currentPlayer));
+        await showGameFinishDialog(globalNavigator.currentContext!, sign == convertPlayerToSign(currentPlayer));
         room.value = Room(null, null, null, board: List.filled(room.value.boardLength * room.value.boardLength, ""));
+       navigator!.pop();
         return true;
       }
     }
