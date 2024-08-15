@@ -16,7 +16,6 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final supabaseService = Get.put(SupabaseService());
 
-
   bool isLocked = false;
 
   @override
@@ -27,8 +26,8 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Oda oluştur"),
       ),
@@ -79,10 +78,12 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
                   ))
               : const SizedBox.shrink(),
           //TODO : BACKGROUND COLOR
+          //TODO : BOARD LENGTH
           FilledButton(
-              onPressed: () {
-                supabaseService.createRoom(
-                    Room(_nameController.text, GameController.username, null, GameController.username, password: _passwordController.text));
+              onPressed: () async {
+                var room = await supabaseService.createRoom(
+                    Room(_nameController.text, GameController.username, null, board: List.filled(3 * 3, ""), password: _passwordController.text));
+                supabaseService.listenCreatedRoom(room);
                 navigator?.pushReplacementNamed("/waiting");
               },
               child: const Text("Oluştur"))

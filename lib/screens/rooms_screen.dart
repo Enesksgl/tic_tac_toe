@@ -18,7 +18,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
   @override
   void initState() {
     super.initState();
-    supabaseService.listenRoom();
+    supabaseService.listenRooms();
   }
 
   @override
@@ -44,11 +44,9 @@ class _RoomsScreenState extends State<RoomsScreen> {
           label: const Text("Oda oluştur"),
         ),
         body: Obx(
-          () => Center(
-            child: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, children: supabaseService.rooms.map((room) => RoomTile(room: room)).toList())),
-          ),
+          () => SingleChildScrollView(
+              child: Column(
+                   children: supabaseService.rooms.map((room) => RoomTile(room: room)).toList())),
         ));
   }
 }
