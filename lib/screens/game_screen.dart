@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,10 +32,10 @@ class _GameScreenState extends State<GameScreen> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gameController.room.value.boardLength,
               ),
-              itemCount: 9,
+              itemCount: gameController.room.value.boardLength * gameController.room.value.boardLength,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return buildGridTile(index);
@@ -46,7 +48,7 @@ class _GameScreenState extends State<GameScreen> {
               Column(
                 children: [
                   Text("X", style: GoogleFonts.gloriaHallelujah(textStyle: const TextStyle(fontSize: 90))),
-                  Text(gameController.room.value.playerX?? "", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                  Text(gameController.room.value.playerX ?? "", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
                 ],
               ),
               Column(
@@ -75,7 +77,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Center(
           child: Text(
             gameController.room.value.board![index],
-            style: GoogleFonts.gloriaHallelujah(textStyle: const TextStyle(fontSize: 90)),
+            style: GoogleFonts.gloriaHallelujah(textStyle:  TextStyle(fontSize: 270/gameController.room.value.boardLength)),
           ),
         ),
       ),
