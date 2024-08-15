@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:tic_tac_toe/controller/game_controller.dart';
@@ -24,6 +25,35 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
   void initState() {
     super.initState();
     _nameController.text = "${GameController.username!} Adlı Oyuncunun Odası";
+  }
+
+  Color _currentColor = Colors.white;
+
+  void _pickColor(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Arkaplan rengi seç"),
+        content: SingleChildScrollView(
+          child: BlockPicker(
+            pickerColor: _currentColor,
+            onColorChanged: (Color color) {
+              setState(() {
+                _currentColor = color;
+              });
+            },
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text("Tamam"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -64,7 +94,7 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
                         })),
                 const SizedBox(width: 10),
                 Text("Şifre", style: Theme.of(context).textTheme.titleMedium),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 isLocked
                     ? Expanded(
                         child: TextFormField(
@@ -80,10 +110,25 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
               ],
             ),
           ),
-
-          //TODO : BACKGROUND COLOR
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Arkaplan rengi: ', style: Theme.of(context).textTheme.titleMedium),
+                ElevatedButton(
+                  onPressed: () => _pickColor(context),
+                  child: Row(
+                    children: [
+                      Container(width: 60, height: 30, color: _currentColor),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,7 +153,6 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
                         itemHeight: 30,
                         minValue: 3,
                         maxValue: 9,
-                        //TODO : Bout count will save database and fetch.
                         step: 1,
                         haptics: true,
                         onChanged: (value) => setState(() => boardLength = value),
@@ -129,7 +173,10 @@ class _RoomCreateScreenState extends State<RoomCreateScreen> {
           FilledButton(
               onPressed: () async {
                 var room = await supabaseService.createRoom(Room(_nameController.text, GameController.username, null,
-                    board: List.filled(boardLength * boardLength, ""), boardLength: boardLength, password: _passwordController.text));
+                    backgroundColor: _currentColor.toHexString(),
+                    board: List.filled(boardLength * boardLength, ""),
+                    boardLength: boardLength,
+                    password: _passwordController.text));
                 supabaseService.listenCreatedRoom(room);
                 navigator?.pushReplacementNamed("/waiting");
               },

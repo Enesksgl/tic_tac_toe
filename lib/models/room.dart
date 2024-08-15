@@ -5,24 +5,21 @@ enum Player { PLAYER_1, PLAYER_2 }
 class Room {
   int? id;
   DateTime? createdAt;
-  String? name, playerX, playerO, password;
+  String? name, playerX, playerO, password, backgroundColor;
   List<dynamic>? board = const [];
   Player? currentTurn = Player.PLAYER_1;
   RoomStatus? status = RoomStatus.CREATED;
   int boardLength = 3;
 
-  Room(
-    this.name,
-    this.playerX,
-    this.playerO, {
-    this.id,
-    this.createdAt,
-    this.status = RoomStatus.CREATED,
-    this.password,
-    this.currentTurn = Player.PLAYER_1,
-    this.boardLength = 3,
-    this.board = const [],
-  });
+  Room(this.name, this.playerX, this.playerO,
+      {this.id,
+      this.createdAt,
+      this.status = RoomStatus.CREATED,
+      this.password,
+      this.currentTurn = Player.PLAYER_1,
+      this.boardLength = 3,
+      this.board = const [],
+      this.backgroundColor});
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,7 +30,8 @@ class Room {
       'current_turn': currentTurn?.name,
       'status': status?.name,
       'password': password,
-      'board_length': boardLength
+      'board_length': boardLength,
+      'background_color': backgroundColor
     };
   }
 
@@ -48,6 +46,7 @@ class Room {
         status: RoomStatus.values.byName(json["status"]),
         board: json["board"],
         password: json["password"],
-        boardLength: json["board_length"]);
+        boardLength: json["board_length"],
+        backgroundColor: json["background_color"]);
   }
 }
